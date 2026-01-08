@@ -11,8 +11,8 @@ The emphasis is on **algorithm behavior and complexity**, demonstrated through C
 - [`composite-data-types.cpp`](composite-data-types.cpp) — Structures, unions, arrays  
 - [`self-referential-structures.cpp`](self-referential-structures.cpp) — Pointer-based node definitions  
 - [`algorithm-examples.cpp`](algorithm-examples.cpp) — Basic algorithms with step tracing  
-- [`time-space-complexity.cpp`](time-space-complexity.cpp) — Runtime and memory analysis  
-- [`asymptotic-notations.cpp`](asymptotic-notations.cpp) — Big-O, Ω, Θ via examples  
+- [`Time-and-space-complexity`](asymptotic-notations.md) — Time and space complexity  
+- [`asymptotic-notations`](asymptotic-notations.md) — Big-O, Ω, Θ
 
 ---
 
