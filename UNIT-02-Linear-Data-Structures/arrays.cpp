@@ -158,7 +158,7 @@ ostream &operator<<(ostream &out, const Array &arr)
     return out << arr.toString();
 }
 
-// Test are AI generated to save time
+// Tests are AI generated to save time
 int main()
 {
     cout << "=== Array Sanity Test ===\n\n";
