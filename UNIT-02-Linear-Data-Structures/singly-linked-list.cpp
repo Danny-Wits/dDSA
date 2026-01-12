@@ -19,12 +19,12 @@ class LinkedList
 {
     Node *head = NULL;
     Node *tail = NULL;
-    Node *temp = NULL;
     Node EMPTY = Node(-1);
 
 public:
     ~LinkedList()
     {
+        Node *temp;
         while (head != NULL)
         {
             temp = head;
@@ -35,6 +35,7 @@ public:
 
     void add(int element)
     {
+        Node *temp;
         if (head == NULL)
         {
             head = new Node(element);
@@ -49,6 +50,7 @@ public:
     void insert(int element, int index)
     {
         // For head insert || Empty list
+        Node *temp;
         if (index <= 0 || head == NULL)
         {
             Node *newNode = new Node(element);
@@ -58,7 +60,7 @@ public:
                 tail = newNode;
             return;
         }
-
+        // getting to the prev pointer
         temp = head;
         for (int i = 0; i < index - 1; i++)
         {
@@ -78,37 +80,22 @@ public:
 
     void remove(int element)
     {
-        // Handling first element match
-        while (head != NULL && head->data == element)
-        {
-            temp = head;
-            head = temp->next;
-            delete temp;
-        }
-        if (head == NULL)
-        {
-            tail = NULL;
-            return;
-        }
-
-        // For rest of the list;
-        Node *prev = head;
-        temp = head->next;
+        Node *temp = head;
+        Node *prev = NULL;
         while (temp != NULL)
         {
+            Node *next = temp->next;
             if (temp->data == element)
             {
-                prev->next = temp->next;
-
-                if (temp == tail)
-                {
+                if (prev)
+                    prev->next = temp->next;
+                else
+                    head = temp->next;
+                if (!next)
                     tail = prev;
-                }
-
                 delete temp;
-                temp = prev->next;
+                temp = next;
             }
-
             else
             {
                 prev = temp;
@@ -116,11 +103,25 @@ public:
             }
         }
     }
-
+    void reverse()
+    {
+        Node *prev = NULL;
+        Node *cur = head;
+        while (cur != NULL)
+        {
+            Node *next = cur->next;
+            cur->next = prev;
+            prev = cur;
+            cur = next;
+        }
+        tail = head;
+        head = prev;
+    }
     //! Quality of life :
     string toString()
     {
         string s = "[ ";
+        Node *temp;
         temp = head;
         if (temp == NULL)
         {
@@ -138,7 +139,6 @@ public:
     }
     Node getHead()
     {
-
         return (head == NULL ? EMPTY : *head);
     }
     Node getTail()
@@ -164,7 +164,6 @@ int main()
 
     cout << "[TEST 1] Newly created list (should be empty)\n";
     cout << "List        : " << l << endl;
-    cout << "Head, Tail  : " << l.getHead() << ", " << l.getTail() << "\n\n";
 
     cout << "[TEST 2] Adding elements 1, 2, 3, 4, 5\n";
     l.add(1);
@@ -208,14 +207,21 @@ int main()
     l.remove(3);
     l.remove(5);
     cout << "List        : " << l << endl;
-    cout << "Head, Tail  : " << l.getHead() << ", " << l.getTail() << "\n\n";
 
     cout << "[TEST 11] Operations on empty list (remove / insert)\n";
     l.remove(10);    // no-op
     l.insert(42, 0); // insert into empty list
     cout << "List        : " << l << endl;
-    cout << "Head, Tail  : " << l.getHead() << ", " << l.getTail() << "\n\n";
-
+    l.remove(42);
+    cout << "[TEST 12] Reverse list\n";
+    l.add(1);
+    l.add(2);
+    l.add(3);
+    l.add(4);
+    l.add(5);
+    cout << "List before        : " << l << endl;
+    l.reverse();
+    cout << "List after         : " << l << endl;
     cout << "================ ALL TESTS COMPLETED ==================\n";
     return 0;
 }
