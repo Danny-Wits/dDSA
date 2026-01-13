@@ -155,6 +155,7 @@ ostream &operator<<(ostream &out, Node node)
     return out << node.toString();
 }
 
+#ifndef LINKED_LIST
 // Test are AI generated:
 int main()
 {
@@ -225,3 +226,5 @@ int main()
     cout << "================ ALL TESTS COMPLETED ==================\n";
     return 0;
 }
+
+#endif

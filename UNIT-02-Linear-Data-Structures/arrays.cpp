@@ -11,7 +11,7 @@ class Array
     int size;
 
 public:
-    Array(int size)
+    Array(int size = 10)
     {
         this->size = size;
         if (size <= 0)
@@ -74,15 +74,17 @@ public:
     //     array[index] = element;
     // }
 
-    void remove(int index)
+    int remove(int index)
     {
         inBound(index);
+        int result = array[index];
         int i = index;
         for (; i < size - 1; i++)
         {
             array[i] = array[i + 1];
         }
         array[i] = 0;
+        return result;
     }
     int search(int element) const
     {
@@ -158,7 +160,10 @@ ostream &operator<<(ostream &out, const Array &arr)
     return out << arr.toString();
 }
 
+#ifndef ARRAY
+
 // Tests are AI generated to save time
+
 int main()
 {
     cout << "=== Array Sanity Test ===\n\n";
@@ -222,3 +227,4 @@ int main()
     cout << "\n=== All tests completed ===\n";
     return 0;
 }
+#endif
