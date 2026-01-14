@@ -1,4 +1,8 @@
 #include <iostream>
+#include <algorithm>
+#include <string>
+#include <stdexcept>
+
 using namespace std;
 class LinkedList;
 class Node
@@ -8,6 +12,7 @@ class Node
 
 public:
     Node(int element) : data(element) {}
+    int getValue() { return data; }
     string toString()
     {
         return to_string(data);
@@ -103,6 +108,36 @@ public:
             }
         }
     }
+    void removeTail()
+    {
+        Node *temp = head;
+        while (temp->next != tail && temp != NULL)
+        {
+            temp = temp->next;
+        }
+        if (temp != NULL)
+        {
+            Node *t = temp->next;
+            temp->next = NULL;
+            delete t;
+        }
+    }
+    void removeHead()
+    {
+        if (!head)
+            return;
+        if (head->next)
+        {
+            Node *temp = head;
+            head = head->next;
+            delete temp;
+        }
+        else
+        {
+            delete head;
+            head = NULL;
+        }
+    }
     void reverse()
     {
         Node *prev = NULL;
@@ -116,6 +151,11 @@ public:
         }
         tail = head;
         head = prev;
+    }
+
+    bool isEmpty()
+    {
+        return head == NULL;
     }
     //! Quality of life :
     string toString()
