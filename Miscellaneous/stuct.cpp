@@ -9,6 +9,7 @@ struct Node
 
 int main()
 {
+
     Node n3{3, NULL};
     Node n2{2, &n3};
     Node n1{1, &n2};

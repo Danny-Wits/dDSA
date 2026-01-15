@@ -110,16 +110,24 @@ public:
     }
     void removeTail()
     {
+        if (head == NULL)
+            return;
         Node *temp = head;
-        while (temp->next != tail && temp != NULL)
+        while (temp->next != tail)
         {
             temp = temp->next;
         }
-        if (temp != NULL)
+        if (temp->next)
         {
-            Node *t = temp->next;
             temp->next = NULL;
-            delete t;
+            delete tail;
+            tail = temp;
+        }
+        else
+        {
+            delete head;
+            head = NULL;
+            tail = NULL;
         }
     }
     void removeHead()
