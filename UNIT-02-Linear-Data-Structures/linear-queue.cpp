@@ -34,10 +34,9 @@ int main()
     q.enqueue(2);
     q.enqueue(3);
 
-    cout << "Queue: ";
     while (!q.isEmpty())
     {
-        cout << q.dequeue() << " ";
+        cout << q.dequeue() << "\n";
     }
     cout << endl;
 
