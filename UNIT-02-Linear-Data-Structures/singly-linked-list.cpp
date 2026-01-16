@@ -113,15 +113,17 @@ public:
         if (!head)
             return;
         Node *temp = head;
-        while (temp->next != tail)
+        Node *prev = NULL;
+        while (temp->next != NULL)
         {
+            prev = temp;
             temp = temp->next;
         }
-        if (temp->next)
+        if (prev)
         {
-            temp->next = NULL;
-            delete tail;
-            tail = temp;
+            prev->next = NULL;
+            delete temp;
+            tail = prev;
         }
         else
         {
@@ -129,7 +131,6 @@ public:
             head = NULL;
             tail = NULL;
         }
-        cout << "Tail : " << tail->getValue() << endl;
     }
     void removeHead()
     {

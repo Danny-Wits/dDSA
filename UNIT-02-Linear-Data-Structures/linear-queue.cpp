@@ -16,8 +16,8 @@ public:
     }
     int dequeue()
     {
-        int result = list.getTail().getValue();
-        list.removeTail();
+        int result = list.getHead().getValue();
+        list.removeHead();
         return result;
     }
     bool isEmpty()
@@ -33,6 +33,7 @@ int main()
     q.enqueue(1);
     q.enqueue(2);
     q.enqueue(3);
+    q.enqueue(4);
 
     while (!q.isEmpty())
     {
