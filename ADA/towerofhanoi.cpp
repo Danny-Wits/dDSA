@@ -62,27 +62,26 @@ void moveFromTo(Tower &t1, Tower &t2)
 Tower t1, t2, t3;
 int moveCount = 0; // total moves
 // Config:
-int delay = 800; // time per move
-int n = 10;      // number of disks
+int delay = 700; // time per move
+int n = 5;       // number of disks
 void print()
 {
     moveCount++;
-    system("clear");
+    system("cls");
     cout << "Start    " << (string)t1 << "\n\n"
-         << "Targert  " << (string)t2 << "\n\n"
+         << "Target   " << (string)t2 << "\n\n"
          << "Auxalary " << (string)t3 << "\n\n"
          << "Move Count :" << moveCount;
     Sleep(delay);
 }
 void towerOfHanoi(int n, Tower &start, Tower &end, Tower &intermediate)
 {
-
     if (n > 0)
     {
-        towerOfHanoi(n - 1, start, intermediate, end);
-        moveFromTo(start, end);
-        print();
-        towerOfHanoi(n - 1, intermediate, end, start);
+        towerOfHanoi(n - 1, start, intermediate, end); // move n-1 disks from start to intermediate
+        moveFromTo(start, end);                        // move disk from start to end
+        print();                                       // to print the state of the towers
+        towerOfHanoi(n - 1, intermediate, end, start); // move n-1 disks from intermediate to end
     }
 }
 
