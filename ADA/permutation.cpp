@@ -13,9 +13,6 @@ void printVector(vector<string> list)
 void permutate(vector<string> list, int n, int r)
 
 {
-    cout << "permutate called with n = " << n << "  r = " << r << " list :";
-    printVector(list);
-
     if (n == r)
         printVector(list);
     else
