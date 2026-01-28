@@ -15,7 +15,8 @@ class Tower
 {
 public:
     vector<Disk> disks;
-
+    string name;
+    Tower(string name) : name(name) {};
     void addDisk(Disk d)
     {
         if (topDiskValue() < d.value)
@@ -54,24 +55,22 @@ public:
     }
 };
 
-void moveFromTo(Tower &t1, Tower &t2)
-{
-    t2.addDisk(t1.removeDisk());
-}
-
-Tower t1, t2, t3;
+Tower t1("start"), t2("aux"), t3("target");
 int moveCount = 0; // total moves
 // Config:
 int delay = 800; // time per move
 int n = 10;      // number of disks
-void print()
+void moveFromTo(Tower &from, Tower &to)
 {
+    to.addDisk(from.removeDisk());
     moveCount++;
-    system("clear");
-    cout << "Start    " << (string)t1 << "\n\n"
-         << "Targert  " << (string)t2 << "\n\n"
-         << "Auxalary " << (string)t3 << "\n\n"
-         << "Move Count :" << moveCount;
+    system("cls");
+    cout
+        << "Start    " << (string)t1 << "\n\n"
+        << "Targert  " << (string)t2 << "\n\n"
+        << "Auxalary " << (string)t3 << "\n\n"
+        << "Move Count :" << moveCount << "\n\n"
+        << "Move : disk" << to.topDiskValue() << " was moved from " << from.name << " to " << to.name;
     Sleep(delay);
 }
 void towerOfHanoi(int n, Tower &start, Tower &end, Tower &intermediate)
@@ -81,7 +80,6 @@ void towerOfHanoi(int n, Tower &start, Tower &end, Tower &intermediate)
     {
         towerOfHanoi(n - 1, start, intermediate, end);
         moveFromTo(start, end);
-        print();
         towerOfHanoi(n - 1, intermediate, end, start);
     }
 }
