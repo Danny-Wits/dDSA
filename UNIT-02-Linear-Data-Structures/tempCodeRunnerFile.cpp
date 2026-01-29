@@ -1,4 +1,1 @@
- // while (true)
-    // {
-    //     cout << q.dequeue() << "\n";
-    // }
+Stack

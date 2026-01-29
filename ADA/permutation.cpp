@@ -10,6 +10,7 @@ void printVector(vector<string> list)
     }
     cout << endl;
 }
+
 void permutate(vector<string> list, int n, int r)
 
 {
@@ -20,6 +21,11 @@ void permutate(vector<string> list, int n, int r)
         for (int i = n; i <= r; i++)
         {
             swap(list[n], list[i]);
+            // for debug
+            cout << "----------------\nVector : ";
+            printVector(list);
+            cout << "i = " << i << " n = " << n << " r = " << r << "\n----------------\n";
+            //-------
             permutate(list, n + 1, r);
             swap(list[n], list[i]);
         }

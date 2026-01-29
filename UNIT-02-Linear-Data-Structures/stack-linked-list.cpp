@@ -36,7 +36,7 @@ public:
         return list.isEmpty();
     }
 };
-
+#ifndef STACK
 int main()
 {
     Stack s;
@@ -64,3 +64,4 @@ int main()
 
     return 0;
 }
+#endif
