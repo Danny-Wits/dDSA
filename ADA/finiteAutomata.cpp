@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 using namespace std;
 class State;
 State *currentState;
@@ -8,14 +9,19 @@ class State
 public:
     char state;
     string name;
-    State *a = NULL;
-    State *b = NULL;
+    unordered_map<char, State *> linked_states;
     State(string name, char state = 'a') : state(state), name(name) {};
 
-    void setAB(State *a, State *b)
+    void addState(char c, State *state)
     {
-        this->a = a;
-        this->b = b;
+        linked_states[c] = state;
+    }
+    void addAllStates(unordered_map<char, State *> states)
+    {
+        for (auto &statePair : states)
+        {
+            linked_states.insert(statePair);
+        }
     }
     void receive(char state)
     {
@@ -27,20 +33,29 @@ public:
     }
     void compute()
     {
-        if (state == 'a')
+        for (auto statePair : linked_states)
         {
-            sendTo(a);
-            currentState = a;
+            if (statePair.first == state)
+            {
+                sendTo(statePair.second);
+                currentState = statePair.second;
+                break;
+            }
         }
-        else
+    }
+    string getStates()
+    {
+        string s = "[ ";
+        for (auto &statePair : linked_states)
         {
-            sendTo(b);
-            currentState = b;
+            s += string(1, statePair.first) + ":" + statePair.second->name + ",";
         }
+        s = s.substr(0, s.size() - 1) + "]";
+        return s;
     }
     void print()
     {
-        cout << name << " State: " << state << " a = " << a->name << " b= " << b->name << "\n";
+        cout << name << " State: " << state << "  Linked States : " << getStates() << "\n";
     }
 };
 
@@ -55,17 +70,17 @@ void printAll(vector<State> &v)
 }
 int main()
 {
-    string s = "aaabbbabbabbabbabbabbabbabaaa";
+    string s = "aabacaabbbccabc";
     vector<State> automata;
     State s4("final");
     State s3("s3");
     State s2("s2");
     State s1("start");
-
-    s4.setAB(&s4, &s4);
-    s3.setAB(&s4, &s1);
-    s2.setAB(&s2, &s3);
-    s1.setAB(&s2, &s1);
+    s4.addAllStates({{'a', &s4}, {'b', &s4}, {'c', &s4}});
+    s3.addAllStates({{'a', &s2}, {'b', &s1}, {'c', &s4}});
+    s2.addAllStates({{'a', &s2}, {'b', &s3}, {'c', &s1}});
+    s1.addAllStates({{'a', &s2}, {'b', &s1}, {'c', &s1}});
+    s1.print();
     automata.push_back(s1);
     automata.push_back(s2);
     automata.push_back(s3);
@@ -82,6 +97,14 @@ int main()
         cout << "\nCurrent : ";
         currentState->print();
         // scanf("%c", &_);
+    }
+    if (currentState == &s4)
+    {
+        cout << "Pattern was found";
+    }
+    else
+    {
+        cout << "Pattern was not found";
     }
 
     return 0;
