@@ -327,9 +327,6 @@ int main()
         cout << "------------------------\n";
     }
     cout << "All tests passed\n";
-    // cout << compute(parse("-1"));
-    // cout << compute(parse("2*(2+-3)+(3+2)*2"));
 
-    // print(parse("-1"));
     return 0;
 }
