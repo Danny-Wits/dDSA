@@ -7,7 +7,7 @@
 using namespace std;
 const vector<char> operators = {'+', '-', '*', '/', '%'};
 const bool debug = true;
-
+float solve(string);
 // Helpers :
 bool isOperator(char c)
 {
@@ -18,6 +18,10 @@ bool isOperator(char c)
     }
     return false;
 }
+int isBrace(char c)
+{
+    return (c == '(' ? 1 : (c == ')' ? -1 : 0));
+}
 void print(vector<string> v)
 {
     for (auto &&i : v)
@@ -26,7 +30,15 @@ void print(vector<string> v)
     }
     cout << "\n";
 }
-
+string join(vector<string> v, int start, int end)
+{
+    string s;
+    for (int i = start; i < end; i++)
+    {
+        s += v[i];
+    }
+    return s;
+}
 float calculate(float op1, float op2, char op)
 {
     switch (op)
@@ -58,35 +70,76 @@ vector<string> parse(string expression)
         {
             continue;
         }
-        if (isOperator(c))
+        if (isBrace(c))
         {
-            bool firstSymbol = parsedList.size() == 0;
-            bool operatorAfterOperator = operand.size() == 0;
-
-            if (firstSymbol && operatorAfterOperator || operatorAfterOperator)
-            {
-                operand.push_back(c);
-                continue;
-            }
-
-            parsedList.push_back(operand);
+            if (operand.size() > 0)
+                parsedList.push_back(operand);
             parsedList.push_back(string(1, c));
             operand.clear();
+        }
+        else if (isOperator(c))
+        {
+            if (c == '-' && operand.size() == 0)
+            {
+                operand.push_back(c);
+            }
+            else
+            {
+                if (operand.size() > 0)
+                    parsedList.push_back(operand);
+                parsedList.push_back(string(1, c));
+                operand.clear();
+            }
         }
         else
         {
             operand.push_back(c);
         }
     }
-    parsedList.push_back(operand);
+    if (operand.size() > 0)
+        parsedList.push_back(operand);
     return parsedList;
 }
 // Solver:
+void resolveBraces(vector<string> &parsedList)
+{
+    vector<int> stack;
+
+    for (int i = 0; i < parsedList.size(); i++)
+    {
+        string &s = parsedList[i];
+        if (isBrace(s[0]) == 1)
+        {
+            stack.push_back(i);
+        }
+        else if (isBrace(s[0]) == -1)
+        {
+            if (stack.size() != 0)
+            {
+                int j = stack.back();
+                stack.pop_back();
+                string inner_expression = join(parsedList, j + 1, i);
+                float result = solve(inner_expression);
+                parsedList[j] = to_string(result);
+                parsedList.erase(parsedList.begin() + j + 1, parsedList.begin() + i + 1);
+                i = j;
+                if (debug)
+                {
+                    cout << "resolving () :" << inner_expression << "\n";
+                    cout << "Evaluated it to " << result << "\n";
+                    cout << "List : ";
+                    print(parsedList);
+                }
+            }
+        }
+    }
+}
 float compute(vector<string> parsedList)
 {
 
     if (debug)
         print(parsedList);
+    resolveBraces(parsedList);
     int precedence = operators.size() - 1;
     for (int p = precedence; p >= 0; p--)
     {
@@ -109,7 +162,7 @@ float compute(vector<string> parsedList)
     }
     return stoi(parsedList[0]);
 }
-int solve(string s)
+float solve(string s)
 {
     return compute(parse(s));
 }
@@ -169,7 +222,7 @@ int main()
     };
 
     // Test cases are AI generated to save time;
-    TestCase tests[] = {
+    vector<TestCase> testCases = {
 
         // ---- Literals ----
         {"0", 0},
@@ -218,8 +271,6 @@ int main()
         {"1/1", 1},
         {"0+5*3", 15},
         {"50-20/2", 40},
-
-        // Minus test
         // ---- Single negative values ----
         {"-1", -1},
         {"-5", -5},
@@ -235,13 +286,50 @@ int main()
         {"-1+-2*-3", 5},      // -2*-3=6
         {"-10+20/-5*2", -18}, // 20/-5=-4 → -4*2=-8
         {"5*-2+-3*4", -22},   // -10 + -12
+        {"2*(2+-3)+(3+2)*2", 8},
+
+        {"(2+3)*4", 20},
+        {"2*(3+4)", 14},
+        {"(2+3)*(4+5)", 45},
+        {"((2+3)*4)+5", 25},
+        {"2+((3+4)*5)", 37},
+        {"(2+(3*4))*5", 70},
+        {"((2+3)+(4+5))*2", 28},
+        {"2*((3+4)*5)", 70},
+
+        {"(-1*(2+3))*4", -20},
+        {"2*(-1*(3-4))", 2},
+        {"(-1*2)*(3+4)", -14},
+        {"(-1*(2+(-1*3)))*4", 4},
+
+        {"2*(2+-3)", -2},
+        {"2*(-1*(3-5))", 4},
+        {"(2+-3)*(4+-5)", 1},
+        {"((2+-3)+4)*5", 15},
+
+        {"(2*(3+4))+(5*(6-2))", 34},
+        {"((2+3)*4)-(6/(1+2))", 18},
+        {"(2+3)*(4-(1+1))", 10},
+
+        {"(((((2)))))", 2},
+        {"((2+3))*(4)", 20},
+        {"((2+3)*(4+1))", 25},
+
+        {"(2+(3+(4+(5))))", 14},
+        {"(((2+3)+4)+5)", 14},
+        {"2*(3+(4*(5-2)))", 30},
 
     };
-    for (auto &t : tests)
+    for (auto &t : testCases)
     {
+        cout << "------------------------\n";
         assert(solve(t.expr) == t.expected && "Failed");
+        cout << "------------------------\n";
     }
     cout << "All tests passed\n";
+    // cout << compute(parse("-1"));
+    // cout << compute(parse("2*(2+-3)+(3+2)*2"));
 
+    // print(parse("-1"));
     return 0;
 }
