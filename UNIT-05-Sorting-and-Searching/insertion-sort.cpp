@@ -31,7 +31,7 @@ void insertionSort(int *a, int n)
 
 int main()
 {
-    check(insertionSort, 10000000, 1);
+    check(insertionSort, 1000000);
 
     return 0;
 }

@@ -1,58 +1,38 @@
 #include <iostream>
-#include <stdlib.h>
-#include <time.h>
+#include "sortc.cpp"
 using namespace std;
-const bool debug = true;
-void print(int *array, int n)
+const bool debug = false;
+
+void shellSort(int *a, int n)
 {
-    if (!debug)
-        return;
-    cout << "[";
-    for (int i = 0; i < n; i++)
+    if (debug)
     {
-        cout << array[i] << ",";
+        cout << "\nBefore sort : ";
+        print(a, n);
     }
-    cout << "\b]\n";
-}
-
-void insertionSort(int *a, int n)
-{
-    cout << "\nBefore sort : ";
-    print(a, n);
-    for (int i = 0; i < n; i++)
+    for (int gap = n / 2; gap > 0; gap /= 2)
     {
-        int key = a[i];
-        int j = i - 1;
-
-        while (j >= 0 && a[j] > key)
+        for (int i = gap; i < n; i++)
         {
-            a[j + 1] = a[j];
-            j--;
+            int j = i;
+
+            while (j >= gap && a[j] < a[j - gap])
+            {
+                swap(a[j - gap], a[j]);
+                j -= gap;
+            }
         }
-        a[j + 1] = key;
     }
 
-    cout << "After sort : ";
-    print(a, n);
-}
-
-void test(int n)
-{
-    int *x = new int[n];
-    srand(time(0));
-    for (int i = n; i >= 1; i--)
+    if (debug)
     {
-        x[n - i] = rand() % 100;
+        cout << "After sort : ";
+        print(a, n);
     }
-    insertionSort(x, n);
 }
+
 int main()
 {
-    int problemSizeLimit = 10;
-    for (int i = 0; i < problemSizeLimit; i++)
-    {
-        test(i);
-    }
-
+    check(shellSort, 1000000);
     return 0;
 }
