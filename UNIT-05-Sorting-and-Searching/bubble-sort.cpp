@@ -1,17 +1,8 @@
 #include <iostream>
+#include "sortc.cpp"
 using namespace std;
 bool debug = false;
-void print(int *array, int n)
-{
-    if (!debug)
-        return;
-    cout << "[";
-    for (int i = 0; i < n; i++)
-    {
-        cout << array[i] << ",";
-    }
-    cout << "\b]\n";
-}
+
 long long cnt = 0;
 void bubbleSort(int *array, int n)
 {
@@ -40,28 +31,14 @@ void bubbleSort(int *array, int n)
     {
         cout << "After sort :";
         print(array, n);
+        cout << "n= " << n << " count = " << cnt << " rate : " << cnt / (n * n) << endl;
     }
-    cout << "n= " << n << " count = " << cnt << " rate : " << cnt / (n * n) << endl;
     cnt = 0;
 }
 
-void test(int n)
-{
-    int *x = new int[n];
-
-    for (int i = n; i >= 1; i--)
-    {
-        x[n - i] = i;
-    }
-    bubbleSort(x, n);
-}
 int main()
 {
-    int problemSizeLimit = 1000;
-    for (int i = 0; i < problemSizeLimit; i++)
-    {
-        test(i);
-    }
+    check(bubbleSort, 10000, 100);
 
     return 0;
 }
