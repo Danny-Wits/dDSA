@@ -1,7 +1,7 @@
 #include <iostream>
 #include "sortc.cpp"
 using namespace std;
-const bool debug = false;
+const bool debug = true;
 
 void shellSort(int *a, int n)
 {
@@ -10,7 +10,12 @@ void shellSort(int *a, int n)
         cout << "\nBefore sort : ";
         print(a, n);
     }
-    for (int gap = n / 2; gap > 0; gap /= 2)
+    int gap = 1;
+    while (gap < n / 3)
+    {
+        gap = 3 * gap + 1;
+    }
+    for (; gap > 0; gap /= 3)
     {
         for (int i = gap; i < n; i++)
         {
@@ -33,6 +38,6 @@ void shellSort(int *a, int n)
 
 int main()
 {
-    check(shellSort, 1000000);
+    check(shellSort, 1000);
     return 0;
 }
