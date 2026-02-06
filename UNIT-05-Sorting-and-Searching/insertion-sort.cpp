@@ -1,24 +1,15 @@
 #include <iostream>
-#include <stdlib.h>
-#include <time.h>
+#include "sortc.cpp"
 using namespace std;
-const bool debug = true;
-void print(int *array, int n)
-{
-    if (!debug)
-        return;
-    cout << "[";
-    for (int i = 0; i < n; i++)
-    {
-        cout << array[i] << ",";
-    }
-    cout << "\b]\n";
-}
+const bool debug = false;
 
 void insertionSort(int *a, int n)
 {
-    cout << "\nBefore sort : ";
-    print(a, n);
+    if (debug)
+    {
+        cout << "\nBefore sort : ";
+        print(a, n);
+    }
     for (int i = 0; i < n; i++)
     {
         int key = a[i];
@@ -31,28 +22,16 @@ void insertionSort(int *a, int n)
         }
         a[j + 1] = key;
     }
-
-    cout << "After sort : ";
-    print(a, n);
-}
-
-void test(int n)
-{
-    int *x = new int[n];
-    srand(time(0));
-    for (int i = n; i >= 1; i--)
+    if (debug)
     {
-        x[n - i] = rand() % 100;
+        cout << "After sort : ";
+        print(a, n);
     }
-    insertionSort(x, n);
 }
+
 int main()
 {
-    int problemSizeLimit = 10;
-    for (int i = 0; i < problemSizeLimit; i++)
-    {
-        test(i);
-    }
+    check(insertionSort, 1000000);
 
     return 0;
 }
