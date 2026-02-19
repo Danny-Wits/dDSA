@@ -16,10 +16,17 @@ void print(Term *head)
 {
     while (head)
     {
-        cout << head->coefficient << "x" << head->exponent << " + ";
+        if (head->exponent == 0)
+        {
+            cout << head->coefficient;
+        }
+        else
+        {
+            cout << head->coefficient << "x" << head->exponent << " + ";
+        }
         head = head->next;
     }
-    cout << "\b\b  \n";
+    cout << "\n";
 }
 
 Term *add_polynomial(Term *head1, Term *head2)
@@ -61,15 +68,16 @@ Term *add_polynomial(Term *head1, Term *head2)
     {
         p3->next = p2;
     }
+    //
     return result->next;
 }
 int main()
-{ // 7x2 + 2x - 3
-    Term *f0 = new Term(-3, 0, NULL);
-    Term *f1 = new Term(2, 1, f0);
+{ // 7x2 + 2x
+    // Term *f0 = new Term(-3, 0, NULL);
+    Term *f1 = new Term(2, 1, NULL);
     Term *f2 = new Term(7, 2, f1);
     // 3x + 2
-    Term *s0 = new Term(2, 0, NULL);
+    Term *s0 = new Term(4, 0, NULL);
     Term *s1 = new Term(3, 1, s0);
 
     print(f2);
